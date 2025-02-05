@@ -11,12 +11,16 @@
 
   - name: install apache2 package
     apt:
-      name: apache2
+      name: 
+        - apache2
+        - libapache2-mod-php
       state: latest
     when: ansible_distribution == ["Debian", "Ubuntu"]
 
-  - name: add php support
-    apt:
-      name: libapache2-mod-php
+  - name: centos install
+    dnf:
+      name: 
+        - php
+        - httpd
       state: latest
-    when: ansible_distribution == ["Debian", "Ubuntu"]
+    when: ansible_distribution == "Centos"
