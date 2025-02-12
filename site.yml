@@ -2,7 +2,6 @@
 
 - hosts: all
   become: true
-  become_method: enable
   pre_tasks:
 
     - name: update repo cache (CentOS)
