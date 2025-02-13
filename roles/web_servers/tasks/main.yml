@@ -1,44 +1,28 @@
-- name: install apache2 package
+\- name: install apache2 package
   tags: apache,apache2,ubuntu
   apt:
     name:
-      - apache2
-      - libapache2-mod-php
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"
     state: latest
-  when: ansible_distribution in ["Debian", "Ubuntu"]
 
-- name: centos install
-  tags: apache,centos,httpd
-  dnf:
-    name:
-      - php
-      - httpd
-    state: latest
-  when: ansible_distribution == "CentOS"
-
-- name: start httpd (CentOS)
+- name: start apache
   tags: apache,centos,httpd
   service:
-    name: httpd
+    name: "{{ apache_service }}"
     state: started
     enabled: yes
   when: ansible_distribution == "CentOS"
   register: httpd
-
-- name: restart httpd (CentOS)
-  tags: apache,centos,httpd
-  service:
-    name: httpd
-    state: restarted
-  when: httpd.changed
 
 - name: change e-mail address
   tags: apache,centos,httpd
   lineinfile:
     path: /etc/httpd/conf/httpd.conf
     regexp: '^ServerAdmin'
-    line: ServerAdmin somebody@somewhere.net
+    line: ServerAdmin 123somebody@somewhere.com
   when: ansible_distribution == "CentOS"
+  notify: restart_apache
 
 - name: copy default html file
   tags: apache,apache2,httpd
