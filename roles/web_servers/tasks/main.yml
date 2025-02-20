@@ -1,4 +1,4 @@
-\- name: install apache2 package
+- name: install apache2 package
   tags: apache,apache2,ubuntu
   apt:
     name:
